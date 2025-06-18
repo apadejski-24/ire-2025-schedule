@@ -63,6 +63,8 @@ async function loadSchedule() {
   createCheckboxFilter('Type', 'typeFilter', types);
 
   function renderSessions(data) {
+    document.getElementById('event-count').textContent = `${data.length} event${data.length === 1 ? '' : 's'} shown`;
+
     container.innerHTML = '';
     data.forEach(session => {
       const card = document.createElement('div');
@@ -125,6 +127,12 @@ async function loadSchedule() {
     renderSessions(filtered);
   }
 
+  const countDisplay = document.createElement('p');
+countDisplay.id = 'event-count';
+countDisplay.style.fontWeight = 'bold';
+countDisplay.style.marginBottom = '1rem';
+container.parentNode.insertBefore(countDisplay, container);
+
   renderSessions(sessions);
 
   filtersContainer.addEventListener('click', (e) => {
@@ -137,6 +145,33 @@ async function loadSchedule() {
   filtersContainer.addEventListener('change', () => {
     applyFilters();
   });
+
+  // Add Clear All Filters button
+const clearBtn = document.createElement('button');
+clearBtn.textContent = 'Clear All Filters';
+clearBtn.className = 'clear-filters-button';
+clearBtn.style.marginTop = '1rem';
+clearBtn.style.display = 'block';
+
+clearBtn.addEventListener('click', () => {
+  // Clear day buttons
+  document.querySelectorAll('.day-button.active').forEach(btn => btn.classList.remove('active'));
+
+  // Clear all checkboxes
+  document.querySelectorAll('#trackFilter-options input, #typeFilter-options input').forEach(input => {
+    input.checked = false;
+  });
+
+  // Update summaries
+  updateSummary('trackFilter', []);
+  updateSummary('typeFilter', []);
+
+  // Re-render full list
+  renderSessions(sessions);
+});
+
+filtersContainer.appendChild(clearBtn);
+
 }
 
 loadSchedule();

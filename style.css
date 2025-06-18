@@ -37,4 +37,16 @@ body {
     color: white;
     border-color: #333;
   }
+
+  .clear-filters-button {
+    background: #eee;
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .clear-filters-button:hover {
+    background: #ddd;
+  }
+  
   
