@@ -20,8 +20,14 @@ async function loadSchedule() {
 
   // Get unique values
   const days = [...new Set(sessions.map(s => getWeekday(s.start_time)))];
-  const tracks = [...new Set(sessions.map(s => s.track).filter(Boolean))];
-  const types = [...new Set(sessions.map(s => s.session_type).filter(Boolean))];
+  const tracks = [
+    ...new Set(
+      sessions.flatMap(s => 
+        s.track ? s.track.split(',').map(t => t.trim()) : []
+      )
+    )
+  ];
+    const types = [...new Set(sessions.map(s => s.session_type).filter(Boolean))];
 
   // Build dropdowns
   function createSelect(label, id, options) {
@@ -77,7 +83,9 @@ async function loadSchedule() {
 
     const filtered = sessions.filter(s => {
       const matchesDay = selectedDay ? getWeekday(s.start_time) === selectedDay : true;
-      const matchesTrack = selectedTrack ? s.track === selectedTrack : true;
+      const matchesTrack = selectedTrack
+      ? s.track && s.track.split(',').map(t => t.trim()).includes(selectedTrack)
+      : true;
       const matchesType = selectedType ? s.session_type === selectedType : true;
       return matchesDay && matchesTrack && matchesType;
     });
