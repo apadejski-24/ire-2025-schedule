@@ -63,38 +63,87 @@ async function loadSchedule() {
   createCheckboxFilter('Type', 'typeFilter', types);
 
   function renderSessions(data) {
-    document.getElementById('event-count').textContent = `${data.length} event${data.length === 1 ? '' : 's'} shown`;
-
     container.innerHTML = '';
+  
+    // Sort sessions by start time
+    data.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+  
+    // Group sessions by local start time label
+    const grouped = {};
     data.forEach(session => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <h2>${session.session_title}</h2>
-        <p class="weekday"><strong>${getWeekday(session.start_time)}</strong></p>
-        <p><strong>Track:</strong> ${session.track}</p>
-        <p><strong>Type:</strong> ${session.session_type}</p>
-        <p><strong>Start:</strong> ${formatLocalTime(session.start_time)}</p>
-        <p><strong>End:</strong> ${formatLocalTime(session.end_time)}</p>
-        <p>${session.description || ''}</p>
-      `;
-
-      if (session.speakers && session.speakers.length > 0) {
-        const speakerList = session.speakers.map(speaker => {
-          const name = `${speaker.first} ${speaker.last}`;
-          const affiliation = speaker.affiliation ? ` (${speaker.affiliation})` : '';
-          return `<li>${name}${affiliation}</li>`;
-        }).join('');
-
-        card.innerHTML += `
-          <p><strong>Speakers:</strong></p>
-          <ul>${speakerList}</ul>
-        `;
-      }
-
-      container.appendChild(card);
+      const startTime = DateTime.fromISO(session.start_time, { zone: 'utc' })
+        .setZone('America/Chicago')
+        .toFormat('cccc h:mm a'); // e.g. "Thursday 9:00 AM"
+  
+      if (!grouped[startTime]) grouped[startTime] = [];
+      grouped[startTime].push(session);
+    });
+  
+    // Count display
+    document.getElementById('event-count').textContent = `${data.length} event${data.length === 1 ? '' : 's'} shown`;
+  
+    // Render each group section
+    Object.entries(grouped).forEach(([startLabel, sessionsAtTime]) => {
+      const groupSection = document.createElement('div');
+      groupSection.className = 'session-group';
+  
+      const header = document.createElement('h3');
+      header.textContent = startLabel;
+      header.className = 'session-time-header';
+      groupSection.appendChild(header);
+  
+      sessionsAtTime.forEach(session => {
+        const grid = document.createElement('div');
+        grid.className = 'card-grid';
+        
+        sessionsAtTime.forEach(session => {
+          const card = document.createElement('div');
+          card.className = 'card collapsed';
+        
+          card.innerHTML = `
+            <h2>${session.session_title}</h2>
+            <p class="weekday"><strong>${getWeekday(session.start_time)}</strong></p>
+            <p><strong>Track:</strong> ${session.track}</p>
+            <p><strong>Type:</strong> ${session.session_type}</p>
+            <p><strong>Start:</strong> ${formatLocalTime(session.start_time)}</p>
+            <p><strong>End:</strong> ${formatLocalTime(session.end_time)}</p>
+            <div class="card-description"><p>${session.description || ''}</p></div>
+          `;
+        
+          if (session.speakers && session.speakers.length > 0) {
+            const speakerList = session.speakers.map(speaker => {
+              const name = `${speaker.first} ${speaker.last}`;
+              const affiliation = speaker.affiliation ? ` (${speaker.affiliation})` : '';
+              return `<li>${name}${affiliation}</li>`;
+            }).join('');
+        
+            card.querySelector('.card-description').innerHTML += `
+              <p><strong>Speakers:</strong></p>
+              <ul>${speakerList}</ul>
+            `;
+          }
+        
+          const toggleBtn = document.createElement('button');
+          toggleBtn.className = 'read-more-button';
+          toggleBtn.textContent = 'Read more';
+          toggleBtn.addEventListener('click', () => {
+            const isCollapsed = card.classList.toggle('collapsed');
+            toggleBtn.textContent = isCollapsed ? 'Read more' : 'Read less';
+          });
+        
+          card.appendChild(toggleBtn);
+          grid.appendChild(card);
+        });
+        
+        groupSection.appendChild(grid);
+        container.appendChild(groupSection);
+        
+      });
+  
+      container.appendChild(groupSection);
     });
   }
+  
 
   function getCheckedValues(containerId) {
     return [...document.querySelectorAll(`#${containerId}-options input:checked`)].map(i => i.value);

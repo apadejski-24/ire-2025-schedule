@@ -1,52 +1,121 @@
 body {
-    font-family: sans-serif;
-    margin: 2rem;
-    background: #f5f5f5;
-    color: #333;
-  }
-  
-  .card {
-    background: white;
-    border: 1px solid #ddd;
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 8px;
-  }
-  
-  .weekday {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 0.25rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-  
-  .day-button {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    padding: 0.4rem 1rem;
-    margin: 0.25rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-  
-  .day-button.active {
-    background-color: #333;
-    color: white;
-    border-color: #333;
-  }
+  font-family: sans-serif;
+  margin: 2rem;
+  background: #f5f5f5;
+  color: #333;
+}
 
-  .clear-filters-button {
-    background: #eee;
-    border: 1px solid #ccc;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  .clear-filters-button:hover {
-    background: #ddd;
-  }
-  
-  
+.session-group {
+  margin-bottom: 2.5rem;
+}.session-group {
+  margin-bottom: 3rem;
+}
+
+.session-time-header {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.25rem;
+}
+
+/* Grid wrapper under each time block */
+.card-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+/* Card style with collapsed content */
+.card {
+  background: white;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 8px;
+  position: relative;
+  transition: box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.card.collapsed .card-description {
+  max-height: 4.5em; /* roughly 3 lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.read-more-button {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  background: none;
+  color: #007acc;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.read-more-button:hover {
+  text-decoration: underline;
+}
+
+.weekday {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.day-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 0.4rem 1rem;
+  margin: 0.25rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.day-button.active {
+  background-color: #333;
+  color: white;
+  border-color: #333;
+}
+
+.clear-filters-button {
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.clear-filters-button:hover {
+  background: #ddd;
+}
+
+.card-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.card.collapsed .card-description {
+  max-height: 4.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.read-more-button {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  background: none;
+  color: #007acc;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.read-more-button:hover {
+  text-decoration: underline;
+}
