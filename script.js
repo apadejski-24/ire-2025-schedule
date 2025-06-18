@@ -10,12 +10,20 @@ async function loadSchedule() {
     return DateTime.fromISO(utcString, { zone: 'utc' })
     .setZone('America/Chicago') // or use your actual zone if needed
     .toLocaleString(DateTime.DATETIME_SHORT);
-}
+    }
+    function getWeekday(utcString) {
+    return DateTime.fromISO(utcString, { zone: 'utc' })
+      .setZone('America/Chicago')
+      .toFormat('cccc'); // e.g., 'Thursday'
+    }
+  
     sessions.forEach(session => {
       const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
         <h2>${session.session_title}</h2>
+        <p class="weekday"><strong>${getWeekday(session.start_time)}</strong></p>
+
         <p><strong>Track:</strong> ${session.track}</p>
         <p><strong>Type:</strong> ${session.session_type}</p>
        <p><strong>Start:</strong> ${formatLocalTime(session.start_time)}</p>

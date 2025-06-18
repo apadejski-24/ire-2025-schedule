@@ -13,3 +13,11 @@ body {
     border-radius: 8px;
   }
   
+  .weekday {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
