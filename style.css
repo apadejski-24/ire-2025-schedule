@@ -21,3 +21,20 @@ body {
     letter-spacing: 0.05em;
   }
   
+  .day-button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 0.4rem 1rem;
+    margin: 0.25rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  
+  .day-button.active {
+    background-color: #333;
+    color: white;
+    border-color: #333;
+  }
+  

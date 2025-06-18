@@ -15,7 +15,7 @@ async function loadSchedule() {
   function getWeekday(utcString) {
     return DateTime.fromISO(utcString, { zone: 'utc' })
       .setZone('America/Chicago')
-      .toFormat('cccc'); // Thursday, etc.
+      .toFormat('cccc');
   }
 
   // Get unique values
@@ -27,7 +27,7 @@ async function loadSchedule() {
       )
     )
   ];
-    const types = [...new Set(sessions.map(s => s.session_type).filter(Boolean))];
+  const types = [...new Set(sessions.map(s => s.session_type).filter(Boolean))];
 
   // Build dropdowns
   function createSelect(label, id, options) {
@@ -37,12 +37,25 @@ async function loadSchedule() {
     filtersContainer.appendChild(wrapper);
   }
 
-  createSelect('Day', 'dayFilter', days);
+  // Day buttons as pills (multi-select)
+  const dayFilterWrapper = document.createElement('div');
+  dayFilterWrapper.id = 'day-buttons';
+  dayFilterWrapper.innerHTML = `<strong>Day:</strong> `;
+
+  days.forEach(day => {
+    const btn = document.createElement('button');
+    btn.textContent = day;
+    btn.dataset.day = day;
+    btn.className = 'day-button'; 
+    dayFilterWrapper.appendChild(btn);
+  });
+
+  filtersContainer.appendChild(dayFilterWrapper);
   createSelect('Track', 'trackFilter', tracks);
   createSelect('Type', 'typeFilter', types);
 
   function renderSessions(data) {
-    container.innerHTML = ''; // clear existing
+    container.innerHTML = '';
     data.forEach(session => {
       const card = document.createElement('div');
       card.className = 'card';
@@ -73,24 +86,40 @@ async function loadSchedule() {
     });
   }
 
-  renderSessions(sessions); // initial render
-
-  // Add filter listeners
-  filtersContainer.addEventListener('change', () => {
-    const selectedDay = document.getElementById('dayFilter').value;
+  function applyFilters() {
+    const selectedDays = [...document.querySelectorAll('.day-button.active')].map(btn => btn.dataset.day);
     const selectedTrack = document.getElementById('trackFilter').value;
     const selectedType = document.getElementById('typeFilter').value;
 
     const filtered = sessions.filter(s => {
-      const matchesDay = selectedDay ? getWeekday(s.start_time) === selectedDay : true;
+      const sessionDay = getWeekday(s.start_time);
+      const matchesDay = selectedDays.length ? selectedDays.includes(sessionDay) : true;
       const matchesTrack = selectedTrack
-      ? s.track && s.track.split(',').map(t => t.trim()).includes(selectedTrack)
-      : true;
-      const matchesType = selectedType ? s.session_type === selectedType : true;
+        ? s.track && s.track.split(',').map(t => t.trim()).includes(selectedTrack)
+        : true;
+      const matchesType = selectedType
+        ? s.session_type === selectedType
+        : true;
+
       return matchesDay && matchesTrack && matchesType;
     });
 
     renderSessions(filtered);
+  }
+
+  renderSessions(sessions); // initial render
+
+  // Toggle day button active state
+  filtersContainer.addEventListener('click', (e) => {
+    if (e.target.matches('.day-button')) {
+      e.target.classList.toggle('active');
+      applyFilters();
+    }
+  });
+
+  // Handle dropdown changes
+  filtersContainer.addEventListener('change', () => {
+    applyFilters();
   });
 }
 
