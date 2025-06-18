@@ -19,10 +19,21 @@ async function loadSchedule() {
         <p><strong>Track:</strong> ${session.track}</p>
         <p><strong>Type:</strong> ${session.session_type}</p>
        <p><strong>Start:</strong> ${formatLocalTime(session.start_time)}</p>
-<p><strong>End:</strong> ${formatLocalTime(session.end_time)}</p>
-
+        <p><strong>End:</strong> ${formatLocalTime(session.end_time)}</p>
         <p>${session.description || ''}</p>
       `;
+      if (session.speakers && session.speakers.length > 0) {
+        const speakerList = session.speakers.map(speaker => {
+          const name = `${speaker.first} ${speaker.last}`;
+          const affiliation = speaker.affiliation ? ` (${speaker.affiliation})` : '';
+          return `<li>${name}${affiliation}</li>`;
+        }).join('');
+        
+        card.innerHTML += `
+          <p><strong>Speakers:</strong></p>
+          <ul>${speakerList}</ul>
+        `;
+      }
       container.appendChild(card);
     });
   }
