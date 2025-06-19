@@ -239,12 +239,26 @@ h2 {
   gap: 0.5rem;
 }
 
-#event-count {
+/* #event-count {
   text-align: center;
   font-weight: bold;
   margin-top: 0.25rem;
   margin-bottom: 1rem;
+} */
+
+
+
+#filter-utility-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
-
-
+#event-count {
+  font-weight: bold;
+  margin: 0;
+}

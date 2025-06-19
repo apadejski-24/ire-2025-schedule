@@ -21,31 +21,7 @@ async function loadSchedule() {
   const days = [...new Set(sessions.map(s => getWeekday(s.start_time)))];
   const tracks = [...new Set(sessions.flatMap(s => s.track ? s.track.split(',').map(t => t.trim()) : []))];
   const types = [...new Set(sessions.map(s => s.session_type).filter(Boolean))];
-  // Add Clear All Filters button
-  const clearBtn = document.createElement('button');
-  clearBtn.textContent = 'Clear Filters';
-  clearBtn.className = 'clear-filters-button';
-  clearBtn.style.marginTop = '1rem';
-  clearBtn.style.display = 'block';
   
-  clearBtn.addEventListener('click', () => {
-    // Clear day buttons
-    document.querySelectorAll('.day-button.active').forEach(btn => btn.classList.remove('active'));
-  
-    // Clear all checkboxes
-    document.querySelectorAll('#trackFilter-options input, #typeFilter-options input').forEach(input => {
-      input.checked = false;
-    });
-  
-    // Update summaries
-    updateSummary('trackFilter', []);
-    updateSummary('typeFilter', []);
-  
-    // Re-render full list
-    renderSessions(sessions);
-  });
-  
-  filtersContainer.appendChild(clearBtn);
   // Day filters
   const dayFilterWrapper = document.createElement('div');
   dayFilterWrapper.id = 'day-buttons';
@@ -199,13 +175,35 @@ async function loadSchedule() {
     renderSessions(filtered);
   }
 
+  const utilityBar = document.createElement('div');
+  utilityBar.id = 'filter-utility-bar';
+  
   const countDisplay = document.createElement('p');
-countDisplay.id = 'event-count';
-countDisplay.style.fontWeight = 'bold';
-countDisplay.style.marginBottom = '1rem';
-container.parentNode.insertBefore(countDisplay, container);
+  countDisplay.id = 'event-count';
+  countDisplay.textContent = '';
+  utilityBar.appendChild(countDisplay);
+  
+  const clearBtn = document.createElement('button');
+  clearBtn.textContent = 'Clear Filters';
+  clearBtn.className = 'clear-filters-button';
+  clearBtn.addEventListener('click', () => {
+    document.querySelectorAll('.day-button.active').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('#trackFilter-options input, #typeFilter-options input').forEach(input => input.checked = false);
+    updateSummary('trackFilter', []);
+    updateSummary('typeFilter', []);
+    renderSessions(sessions);
+  });
+  utilityBar.appendChild(clearBtn);
+  
+  // Add it to the page
+  filtersContainer.appendChild(utilityBar);
+  
 
   renderSessions(sessions);
+
+ 
+  
+  filtersContainer.appendChild(clearBtn);
 
   filtersContainer.addEventListener('click', (e) => {
     if (e.target.matches('.day-button')) {
