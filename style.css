@@ -383,7 +383,7 @@ h2 {
   }
 
   .custom-multiselect details[open] > div {
-    max-height: 200px;
+    max-height: 160px;
     overflow-y: auto;
     padding-right: 0.5rem; /* add breathing room for scrollbar */
   }
