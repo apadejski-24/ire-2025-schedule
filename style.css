@@ -340,10 +340,6 @@ h2 {
 
   }
 
-  #filters {
-    padding: 0 .5rem;
-  }
-
   #filter-utility-bar {
     gap: 1rem;
     flex-direction: column;
@@ -352,4 +348,39 @@ h2 {
   .card {
     max-width: 300px;
   }
+
+  #filters {
+    padding: 0.5rem 1rem;
+    gap: 0.75rem;         /* was 1.5rem */
+    margin-bottom: 1rem;  /* tighten up space below */
+  }
+
+  #filter-utility-bar {
+    gap: 0.5rem;
+    flex-direction: column;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  #day-buttons {
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .custom-multiselect details {
+    margin-top: 0.25rem;
+  }
+
+  .clear-filters-button,
+  .view-toggle-button {
+    width: 100%;        /* make buttons stack cleanly */
+    max-width: 300px;   /* avoid going too wide */
+  }
+
+  .day-button{
+    padding: 0.4rem .5rem;
+    margin: 0;
+  }
+  
+
 }
