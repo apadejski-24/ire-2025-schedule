@@ -92,54 +92,49 @@ async function loadSchedule() {
       header.className = 'session-time-header';
       groupSection.appendChild(header);
   
+      const grid = document.createElement('div');
+      grid.className = 'card-grid';
+  
       sessionsAtTime.forEach(session => {
-        const grid = document.createElement('div');
-        grid.className = 'card-grid';
-        
-        sessionsAtTime.forEach(session => {
-          const card = document.createElement('div');
-          card.className = 'card collapsed';
-        
-          card.innerHTML = `
-            <h2>${session.session_title}</h2>
-            <p class="weekday"><strong>${getWeekday(session.start_time)}</strong></p>
-            <p><strong>Track:</strong> ${session.track}</p>
-            <p><strong>Type:</strong> ${session.session_type}</p>
-            <p><strong>Start:</strong> ${formatLocalTime(session.start_time)}</p>
-            <p><strong>End:</strong> ${formatLocalTime(session.end_time)}</p>
-            <div class="card-description"><p>${session.description || ''}</p></div>
+        const card = document.createElement('div');
+        card.className = 'card collapsed';
+  
+        card.innerHTML = `
+          <h2>${session.session_title}</h2>
+          <p class="weekday"><strong>${getWeekday(session.start_time)}</strong></p>
+          <p><strong>Track:</strong> ${session.track}</p>
+          <p><strong>Type:</strong> ${session.session_type}</p>
+          <p><strong>Start:</strong> ${formatLocalTime(session.start_time)}</p>
+          <p><strong>End:</strong> ${formatLocalTime(session.end_time)}</p>
+          <div class="card-description"><p>${session.description || ''}</p></div>
+        `;
+  
+        if (session.speakers && session.speakers.length > 0) {
+          const speakerList = session.speakers.map(speaker => {
+            const name = `${speaker.first} ${speaker.last}`;
+            const affiliation = speaker.affiliation ? ` (${speaker.affiliation})` : '';
+            return `<li>${name}${affiliation}</li>`;
+          }).join('');
+  
+          card.querySelector('.card-description').innerHTML += `
+            <p><strong>Speakers:</strong></p>
+            <ul>${speakerList}</ul>
           `;
-        
-          if (session.speakers && session.speakers.length > 0) {
-            const speakerList = session.speakers.map(speaker => {
-              const name = `${speaker.first} ${speaker.last}`;
-              const affiliation = speaker.affiliation ? ` (${speaker.affiliation})` : '';
-              return `<li>${name}${affiliation}</li>`;
-            }).join('');
-        
-            card.querySelector('.card-description').innerHTML += `
-              <p><strong>Speakers:</strong></p>
-              <ul>${speakerList}</ul>
-            `;
-          }
-        
-          const toggleBtn = document.createElement('button');
-          toggleBtn.className = 'read-more-button';
-          toggleBtn.textContent = 'Read more';
-          toggleBtn.addEventListener('click', () => {
-            const isCollapsed = card.classList.toggle('collapsed');
-            toggleBtn.textContent = isCollapsed ? 'Read more' : 'Read less';
-          });
-        
-          card.appendChild(toggleBtn);
-          grid.appendChild(card);
+        }
+  
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'read-more-button';
+        toggleBtn.textContent = 'Read more';
+        toggleBtn.addEventListener('click', () => {
+          const isCollapsed = card.classList.toggle('collapsed');
+          toggleBtn.textContent = isCollapsed ? 'Read more' : 'Read less';
         });
-        
-        groupSection.appendChild(grid);
-        container.appendChild(groupSection);
-        
+  
+        card.appendChild(toggleBtn);
+        grid.appendChild(card);
       });
   
+      groupSection.appendChild(grid);
       container.appendChild(groupSection);
     });
   }
