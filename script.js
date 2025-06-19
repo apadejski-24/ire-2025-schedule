@@ -6,11 +6,11 @@ async function loadSchedule() {
   const filtersContainer = document.getElementById('filters');
   const { DateTime } = luxon;
 
-  function formatLocalTime(utcString) {
-    return DateTime.fromISO(utcString, { zone: 'utc' })
-      .setZone('America/Chicago')
-      .toLocaleString(DateTime.DATETIME_SHORT);
+  function formatLocalTime(utcString, timeOnly = false) {
+    const dt = DateTime.fromISO(utcString, { zone: 'utc' }).setZone('America/Chicago');
+    return timeOnly ? dt.toFormat('h:mm a') : dt.toLocaleString(DateTime.DATETIME_SHORT);
   }
+  
 
   function getWeekday(utcString) {
     return DateTime.fromISO(utcString, { zone: 'utc' })
@@ -101,11 +101,13 @@ async function loadSchedule() {
   
         card.innerHTML = `
           <h2>${session.session_title}</h2>
-          <p class="weekday"><strong>${getWeekday(session.start_time)}</strong></p>
-          <p><strong>Track:</strong> ${session.track}</p>
-          <p><strong>Type:</strong> ${session.session_type}</p>
-          <p><strong>Start:</strong> ${formatLocalTime(session.start_time)}</p>
-          <p><strong>End:</strong> ${formatLocalTime(session.end_time)}</p>
+          <p><strong>Track:</strong> ${session.track}</br>
+          <strong>Type:</strong> ${session.session_type}</br>
+         <strong>Time:</strong> ${formatLocalTime(session.start_time, true)} – ${formatLocalTime(session.end_time, true)} </br>
+         
+         <strong>Location:</strong> ${session.room?.room_name || 'TBA'}</p>
+         </p>
+
           <div class="card-description"><p>${session.description || ''}</p></div>
         `;
   

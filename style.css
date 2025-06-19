@@ -25,6 +25,12 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 
+h2 {
+  margin-top: .5rem;
+  margin-bottom: 0;
+}
+
+
 /* Card style with collapsed content */
 .card {
   background: white;
@@ -35,6 +41,7 @@ body {
   transition: box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
+  max-width: 300px;
 }
 
 .card.collapsed .card-description {
