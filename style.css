@@ -262,3 +262,18 @@ h2 {
   font-weight: bold;
   margin: 0;
 }
+
+.schedule-toggle-button {
+  align-self: flex-end;
+  background: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.schedule-toggle-button:hover {
+  background: #e0e0e0;
+}

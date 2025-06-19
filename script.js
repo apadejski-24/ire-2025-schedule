@@ -6,6 +6,22 @@ async function loadSchedule() {
   const filtersContainer = document.getElementById('filters');
   const { DateTime } = luxon;
 
+  // const userSchedule = new Set();
+
+  const STORAGE_KEY = 'userSchedule2025';
+
+function loadUserSchedule() {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  return new Set(stored ? JSON.parse(stored) : []);
+}
+
+function saveUserSchedule(scheduleSet) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...scheduleSet]));
+}
+
+let userSchedule = loadUserSchedule();
+
+
   function formatLocalTime(utcString, timeOnly = false) {
     const dt = DateTime.fromISO(utcString, { zone: 'utc' }).setZone('America/Chicago');
     return timeOnly ? dt.toFormat('h:mm a') : dt.toLocaleString(DateTime.DATETIME_SHORT);
@@ -100,6 +116,24 @@ async function loadSchedule() {
       sessionsAtTime.forEach(session => {
         const card = document.createElement('div');
         card.className = 'card collapsed';
+
+        const isAdded = userSchedule.has(session.id);
+
+        const addBtn = document.createElement('button');
+        addBtn.className = 'schedule-toggle-button';
+        addBtn.textContent = isAdded ? 'Remove from Schedule' : 'Add to Schedule';
+        
+        addBtn.addEventListener('click', () => {
+          if (userSchedule.has(session.id)) {
+            userSchedule.delete(session.id);
+            addBtn.textContent = 'Add to Schedule';
+          } else {
+            userSchedule.add(session.id);
+            addBtn.textContent = 'Remove from Schedule';
+          }
+          saveUserSchedule(userSchedule); // ✅ this saves changes to localStorage
+        });
+        
   
         card.innerHTML = `
           <h2>${session.session_title}</h2>
@@ -112,6 +146,9 @@ async function loadSchedule() {
 
           <div class="card-description"><p>${session.description || ''}</p></div>
         `;
+
+        card.prepend(addBtn); // put at the top of the card
+
   
         if (session.speakers && session.speakers.length > 0) {
           const speakerList = session.speakers.map(speaker => {
