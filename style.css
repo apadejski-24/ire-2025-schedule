@@ -18,12 +18,7 @@ body {
   padding-bottom: 0.25rem;
 }
 
-/* Grid wrapper under each time block */
-.card-grid {
-  display: grid;
-  gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-}
+
 
 h2 {
   margin-top: .5rem;
@@ -41,7 +36,6 @@ h2 {
   transition: box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
-  max-width: 300px;
 }
 
 .card.collapsed .card-description {
@@ -109,8 +103,8 @@ h2 {
 
 .card-grid {
   display: grid;
-  gap: 1.25rem;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
 .card.collapsed .card-description {
@@ -276,4 +270,38 @@ h2 {
 
 .schedule-toggle-button:hover {
   background: #e0e0e0;
+}
+
+.view-toggle-button {
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.view-toggle-button:hover {
+  background: #ddd;
+}
+
+
+@media (max-width: 768px) {
+  body {
+    margin: 1rem;
+  }
+
+  .card-grid {
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
+
+  #filters {
+    padding: 0 1rem;
+  }
+
+  #filter-utility-bar {
+    gap: 1rem;
+    flex-direction: column;
+  }
 }
