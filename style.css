@@ -381,6 +381,12 @@ h2 {
     padding: 0.4rem .5rem;
     margin: 0;
   }
+
+  .custom-multiselect details[open] > div {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 0.5rem; /* add breathing room for scrollbar */
+  }
   
 
 }
