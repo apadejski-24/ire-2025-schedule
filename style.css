@@ -75,12 +75,16 @@ h2 {
 .day-button {
   background-color: #f0f0f0;
   border: 1px solid #ccc;
-  border-radius: 20px;
+  border-radius: 4px;
   padding: 0.4rem 1rem;
   margin: 0.25rem;
   font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.2s ease;
+}
+
+.day-button:hover {
+  opacity: .5;
 }
 
 .day-button.active {
@@ -92,9 +96,11 @@ h2 {
 .clear-filters-button {
   background: #eee;
   border: 1px solid #ccc;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
+  border-radius: 4px;
+  font-weight: 600;
 }
 
 .clear-filters-button:hover {
@@ -126,3 +132,119 @@ h2 {
 .read-more-button:hover {
   text-decoration: underline;
 }
+
+
+.custom-multiselect details {
+  margin-top: 1rem;
+}
+
+.custom-multiselect summary {
+  font-size: 1.1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.custom-multiselect summary::marker {
+  display: none; /* hide default disclosure arrow in some browsers */
+}
+
+.custom-multiselect div[id$="-options"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 0.5rem;
+}
+
+.custom-multiselect details[open] summary::after {
+  content: "▲";
+  margin-left: 0.5rem;
+  font-size: 0.7rem;
+}
+
+.custom-multiselect summary::after {
+  content: "▼";
+  margin-left: 0.5rem;
+  font-size: 0.7rem;
+}
+
+
+.custom-multiselect label {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.95rem;
+  background-color: #e0e0e0;
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+}
+
+.custom-multiselect label:hover {
+ opacity: .8;
+}
+
+/* Bigger checkboxes */
+.custom-multiselect input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #333;
+  cursor: pointer;
+}
+
+#intro {
+  max-width: 960px;
+  margin: 2rem auto 1rem auto;
+  text-align: center;
+}
+
+#intro h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+#intro p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 0.5rem 0;
+}
+
+.credits {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: 1rem;
+}
+
+.credits a {
+  color: #007acc;
+  text-decoration: none;
+}
+.credits a:hover {
+  text-decoration: underline;
+}
+
+#filters {
+  max-width: 960px;
+  margin: 1rem auto 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+  text-align: center;
+}
+
+#day-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+#event-count {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+
+

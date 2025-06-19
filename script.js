@@ -21,11 +21,34 @@ async function loadSchedule() {
   const days = [...new Set(sessions.map(s => getWeekday(s.start_time)))];
   const tracks = [...new Set(sessions.flatMap(s => s.track ? s.track.split(',').map(t => t.trim()) : []))];
   const types = [...new Set(sessions.map(s => s.session_type).filter(Boolean))];
-
+  // Add Clear All Filters button
+  const clearBtn = document.createElement('button');
+  clearBtn.textContent = 'Clear Filters';
+  clearBtn.className = 'clear-filters-button';
+  clearBtn.style.marginTop = '1rem';
+  clearBtn.style.display = 'block';
+  
+  clearBtn.addEventListener('click', () => {
+    // Clear day buttons
+    document.querySelectorAll('.day-button.active').forEach(btn => btn.classList.remove('active'));
+  
+    // Clear all checkboxes
+    document.querySelectorAll('#trackFilter-options input, #typeFilter-options input').forEach(input => {
+      input.checked = false;
+    });
+  
+    // Update summaries
+    updateSummary('trackFilter', []);
+    updateSummary('typeFilter', []);
+  
+    // Re-render full list
+    renderSessions(sessions);
+  });
+  
+  filtersContainer.appendChild(clearBtn);
   // Day filters
   const dayFilterWrapper = document.createElement('div');
   dayFilterWrapper.id = 'day-buttons';
-  dayFilterWrapper.innerHTML = `<strong>Day:</strong> `;
 
   days.forEach(day => {
     const btn = document.createElement('button');
@@ -37,6 +60,8 @@ async function loadSchedule() {
 
   filtersContainer.appendChild(dayFilterWrapper);
 
+
+
   // Custom multi-select filter with checkboxes
   function createCheckboxFilter(label, id, options) {
     const wrapper = document.createElement('div');
@@ -44,17 +69,18 @@ async function loadSchedule() {
     wrapper.style.marginRight = '1rem';
 
     wrapper.innerHTML = `
-      <details>
-        <summary><strong>${label}:</strong> <span id="${id}-summary">All</span></summary>
-        <div id="${id}-options">
-          ${options.map(opt => `
-            <label style="display: block; margin-left: 1rem;">
-              <input type="checkbox" value="${opt}"> ${opt}
-            </label>
-          `).join('')}
-        </div>
-      </details>
-    `;
+    <details>
+      <summary><strong>${label}:</strong> <span id="${id}-summary">All</span></summary>
+      <div id="${id}-options">
+        ${options.map(opt => `
+          <label>
+            <input type="checkbox" value="${opt}"> ${opt}
+          </label>
+        `).join('')}
+      </div>
+    </details>
+  `;
+  
 
     filtersContainer.appendChild(wrapper);
   }
@@ -192,31 +218,7 @@ container.parentNode.insertBefore(countDisplay, container);
     applyFilters();
   });
 
-  // Add Clear All Filters button
-const clearBtn = document.createElement('button');
-clearBtn.textContent = 'Clear All Filters';
-clearBtn.className = 'clear-filters-button';
-clearBtn.style.marginTop = '1rem';
-clearBtn.style.display = 'block';
-
-clearBtn.addEventListener('click', () => {
-  // Clear day buttons
-  document.querySelectorAll('.day-button.active').forEach(btn => btn.classList.remove('active'));
-
-  // Clear all checkboxes
-  document.querySelectorAll('#trackFilter-options input, #typeFilter-options input').forEach(input => {
-    input.checked = false;
-  });
-
-  // Update summaries
-  updateSummary('trackFilter', []);
-  updateSummary('typeFilter', []);
-
-  // Re-render full list
-  renderSessions(sessions);
-});
-
-filtersContainer.appendChild(clearBtn);
+  
 
 }
 
